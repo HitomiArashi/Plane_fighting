@@ -5,7 +5,15 @@ using namespace std;
 TextObject::TextObject()
 {
 	//Todo
-	;
+	rect_.x = 500;
+	
+	rect_.y = 10;
+
+	text_color_.r = 0;
+
+	text_color_.g = 0;
+
+	text_color_.b = 0;
 }
 
 TextObject::~TextObject()
