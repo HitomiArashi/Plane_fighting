@@ -22,6 +22,8 @@ using namespace std;
 
 //Infomation of the input and output stuff
 
+#define GA_FAILED -1
+
 //Screen
 
 static SDL_Surface* g_screen = NULL;
