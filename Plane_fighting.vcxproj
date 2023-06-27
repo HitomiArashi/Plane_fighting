@@ -26,6 +26,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainObject.cpp" />
     <ClCompile Include="PlaneHp.cpp" />
+    <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="ThreatsObject.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,7 @@
     <ClInclude Include="ExplosionObject.h" />
     <ClInclude Include="MainObject.h" />
     <ClInclude Include="PlaneHp.h" />
+    <ClInclude Include="TextObject.h" />
     <ClInclude Include="ThreatsObject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
