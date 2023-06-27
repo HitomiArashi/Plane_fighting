@@ -12,9 +12,13 @@
 
 #include "PlaneHp.h"
 
+#include "TextObject.h"
+
 #undef main
 
 using namespace std;
+
+TTF_Font* g_font_text = NULL;
 
 //Check initialization
 
@@ -38,6 +42,12 @@ bool Init()
     }
 
     //Read file wav adio
+
+    g_sound_bullet[0] = Mix_LoadWAV("Laser.wav");
+
+    g_sound_bullet[1] = Mix_LoadWAV("Fire.wav");
+
+    g_sound_exp = Mix_LoadWAV("Explo.wav");
 
     if (g_sound_exp == NULL || g_sound_bullet[0] == NULL || g_sound_bullet[1] == NULL)
     {
@@ -186,6 +196,8 @@ int main(int arc, char* argv[])
         }
     }
 
+    unsigned int death_time = 0;
+
     while (is_quite == false)
     {
         //Quit action
@@ -240,10 +252,12 @@ int main(int arc, char* argv[])
                 {
                     Mix_PlayChannel(-1, g_sound_exp, 0); //Display the sound
 
+                    death_time++;
+
                     for (int ex = 0; ex < 4; ex++)
                     {
                         //Take the cord
-                        
+
                         int x_pos = (plane->GetRect().x + plane->GetRect().w * 0.5) - EXP_WIDTH * 0.5;
 
                         int y_pos = (plane->GetRect().y + plane->GetRect().h * 0.5) - EXP_HEIGHT * 0.5;
@@ -265,15 +279,41 @@ int main(int arc, char* argv[])
                             return 0;
                         }
                     }
-                    //Delete all memory
-                    
-                    delete[] p_threats;
 
-                    SDLCommonFunc::CleanUp();
+                    if (death_time < HEALTH_POINT)
+                    {
+                        SDL_Delay(1000);
 
-                    SDL_Quit();
+                        plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y);
 
-                    return 1;
+                        plane_hp.Decrease();
+
+                        plane_hp.Render(g_screen);
+
+                        if (SDL_Flip(g_screen) == -1)
+                        {
+                            delete[] p_threats;
+
+                            SDLCommonFunc::CleanUp();
+
+                            SDL_Quit();
+
+                            return 1;
+                        }
+                    }
+
+                    else
+                    {
+                        //Delete all memory
+
+                        delete[] p_threats;
+
+                        SDLCommonFunc::CleanUp();
+
+                        SDL_Quit();
+
+                        return 1;
+                    }
                 }
 
                 //Check the collision between main bullet and threat
@@ -342,6 +382,8 @@ int main(int arc, char* argv[])
                         {
                             Mix_PlayChannel(-1, g_sound_exp, 0); //Display the sound
 
+                            death_time++;
+
                             for (int ex = 0; ex < 4; ex++)
                             {
                                 //Take the cord
@@ -367,15 +409,41 @@ int main(int arc, char* argv[])
                                     return 0;
                                 }
                             }
-                            //Delete all memory
 
-                            delete[] p_threats;
+                            if (death_time < HEALTH_POINT)
+                            {
+                                SDL_Delay(1000);
 
-                            SDLCommonFunc::CleanUp();
+                                plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y);
 
-                            SDL_Quit();
+                                plane_hp.Decrease();
 
-                            return 1;
+                                plane_hp.Render(g_screen);
+
+                                if (SDL_Flip(g_screen) == -1)
+                                {
+                                    delete[] p_threats;
+
+                                    SDLCommonFunc::CleanUp();
+
+                                    SDL_Quit();
+
+                                    return 1;
+                                }
+                            }
+
+                            else
+                            {
+                                //Delete all memory
+
+                                delete[] p_threats;
+
+                                SDLCommonFunc::CleanUp();
+
+                                SDL_Quit();
+
+                                return 1;
+                            }
                         }
                     }
                 }
