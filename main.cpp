@@ -59,6 +59,13 @@ bool Init()
         return false;
     }
 
+    g_font_text = TTF_OpenFont("PTN77F.ttf", 20);
+
+    if (g_font_text == NULL)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -125,6 +132,12 @@ int main(int arc, char* argv[])
     PlaneHp plane_hp;
 
     plane_hp.Init();
+
+    //Set the text color
+
+    TextObject mark_game;
+
+    mark_game.SetColor(TextObject::BLACK_TEXT);
 
     //Load background
 
@@ -201,7 +214,11 @@ int main(int arc, char* argv[])
         }
     }
 
+    //Run game
+
     unsigned int death_time = 0;
+
+    unsigned int mark_value = 0;
 
     while (is_quite == false)
     {
@@ -337,6 +354,8 @@ int main(int arc, char* argv[])
                         {
                             Mix_PlayChannel(-1, g_sound_exp, 0); //Display the sound
 
+                            mark_value++;
+                            
                             for (int ex = 0; ex < 4; ex++)
                             {
                                 //Take the cord
@@ -454,6 +473,20 @@ int main(int arc, char* argv[])
                 }
             }
         }
+
+        //Show mark value to screen
+
+        string val_str_mark = to_string(mark_value);
+
+        string strMark("Mark: ");
+
+        strMark += val_str_mark;
+
+        mark_game.SetText(strMark);
+
+        mark_game.SetRect(500, 10);
+
+        mark_game.CreateGameText(g_font_text, g_screen);
 
         //Update screen
         
