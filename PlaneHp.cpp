@@ -35,7 +35,7 @@ void PlaneHp::Init()
 {
 	LoadImg("heart.png");
 
-	number_ = 3;
+	number_ = HEALTH_POINT;
 
 	if (pos_list_.size() > 0)
 	{
@@ -44,12 +44,12 @@ void PlaneHp::Init()
 
 	for (int i = 0; i < number_; i++)
 	{
-		AddPos(20 + i * 40);
+		AddPos(20 + i * 25);
 	}
 }
 
 void PlaneHp::Decrease()
 {
-	number_--;
+	number_ --;
 	pos_list_.pop_back();
 }
