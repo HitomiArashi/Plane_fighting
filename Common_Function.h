@@ -64,6 +64,8 @@ const int POS_START_MAIN_Y = 200;
 
 const int MAIN_OBJECT_SPEED = 10;
 
+const int HEALTH_POINT = 3;
+
 //Threat
 
 const string THREAT_IMAGE = "af1.png";
@@ -102,9 +104,9 @@ const string THREAT_BULLET = "sphere2.png";
 
 //Sound
 
-static Mix_Chunk* g_sound_bullet[2] = { Mix_LoadWAV("Laser.wav"), Mix_LoadWAV("Fire.wav") };
+static Mix_Chunk* g_sound_bullet[2];
 
-static Mix_Chunk* g_sound_exp = Mix_LoadWAV("Explo.wav");
+static Mix_Chunk* g_sound_exp;
 
 static Mix_Chunk* g_sound_ex_main = NULL;
 
