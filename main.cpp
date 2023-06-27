@@ -24,7 +24,7 @@ TTF_Font* g_font_text = NULL;
 
 bool Init()
 {
-    if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
+    if (SDL_Init(SDL_INIT_EVERYTHING) == GA_FAILED)
     {
         return false;
     }
@@ -36,7 +36,7 @@ bool Init()
         return false;
     }
 
-    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == GA_FAILED)
     {
         return false;
     }
@@ -50,6 +50,11 @@ bool Init()
     g_sound_exp = Mix_LoadWAV("Explo.wav");
 
     if (g_sound_exp == NULL || g_sound_bullet[0] == NULL || g_sound_bullet[1] == NULL)
+    {
+        return false;
+    }
+
+    if (TTF_Init() == GA_FAILED)
     {
         return false;
     }
