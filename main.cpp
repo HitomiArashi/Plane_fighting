@@ -133,6 +133,12 @@ int main(int arc, char* argv[])
 
     plane_hp.Init();
 
+    //Set the timer
+
+    TextObject game_time;
+
+    game_time.SetColor(TextObject::BLACK_TEXT);
+
     //Set the text color
 
     TextObject mark_game;
@@ -473,6 +479,22 @@ int main(int arc, char* argv[])
                 }
             }
         }
+
+        //Show time for game
+
+        string str_time = "Time: ";
+
+        Uint32 time_val = SDL_GetTicks() / 1000;
+
+        string str_val = to_string(time_val);
+
+        str_time += str_val;
+
+        game_time.SetText(str_time);
+
+        game_time.SetRect(SCREEN_WIDTH - 200, 10);
+
+        game_time.CreateGameText(g_font_text, g_screen);
 
         //Show mark value to screen
 
