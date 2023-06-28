@@ -154,6 +154,11 @@ bool SDLCommonFunc::CheckCollision(const SDL_Rect& object1, const SDL_Rect& obje
     return false;
 }
 
+int SDLCommonFunc::ShowMenu(SDL_Surface* des, TTF_Font* font)
+{
+
+}
+
 //Clean up the memory
 
 void SDLCommonFunc::CleanUp()
