@@ -18,6 +18,8 @@
 
 #include<SDL_mixer.h>
 
+#include<SDL_ttf.h>
+
 using namespace std;
 
 //Infomation of the input and output stuff
@@ -125,6 +127,8 @@ namespace SDLCommonFunc
 	bool CheckCollision(const SDL_Rect& object1, const SDL_Rect& object2);
 
 	void CleanUp();
+
+	int ShowMenu(SDL_Surface* des, TTF_Font* font);
 }
 
 #endif
