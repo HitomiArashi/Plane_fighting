@@ -128,7 +128,7 @@ namespace SDLCommonFunc
 
 	void CleanUp();
 
-	int ShowMenu(SDL_Surface* des, TTF_Font* font);
+	//int ShowMenu(SDL_Surface* des, TTF_Font* font);
 }
 
 #endif
