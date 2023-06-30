@@ -20,6 +20,8 @@
 
 #include<SDL_ttf.h>
 
+#include "TextObject.h"
+
 using namespace std;
 
 //Infomation of the input and output stuff
@@ -31,6 +33,8 @@ using namespace std;
 static SDL_Surface* g_screen = NULL;
 
 static SDL_Surface* g_bkground = NULL;
+
+static SDL_Surface* menu = NULL;
 
 static SDL_Event g_even;
 
