@@ -1,5 +1,7 @@
 #include "ExplosionObject.h"
 
+using namespace SDLCommonFunc;
+
 Explosion::Explosion()
 {
 	//Todo
@@ -53,5 +55,5 @@ void Explosion::ShowEx(SDL_Surface* des)
 		frame_ = 0;
 	}
 
-	SDLCommonFunc::ApplySurfaceClip(this->p_object_, des, &clip_[frame_], rect_.x, rect_.y);
+	ApplySurfaceClip(this->p_object_, des, &clip_[frame_], rect_.x, rect_.y);
 }
