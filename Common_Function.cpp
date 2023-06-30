@@ -156,10 +156,77 @@ namespace SDLCommonFunc
         return false;
     }
 
-    //int ShowMenu(SDL_Surface* des, TTF_Font* font)
-    //{
-    //
-    //}
+    int ShowMenu(SDL_Surface* des, TTF_Font* font)
+    {
+        menu = LoadImage("Menu.png");
+
+        if (menu == NULL)
+        {
+            return 1;
+        }
+
+        const int kMenuItemNum = 2;
+
+        int xm = 0, ym = 0;
+
+        SDL_Rect pos_arr[kMenuItemNum];
+
+        pos_arr[0].x = 200;
+
+        pos_arr[0].y = 400;
+
+        pos_arr[1].x = 200;
+
+        pos_arr[1].y = 200;
+
+        TextObject text_menu[kMenuItemNum];
+
+        text_menu[0].SetText("Play Game");
+
+        text_menu[0].SetColor(TextObject::BLACK_TEXT);
+
+        text_menu[0].SetRect(pos_arr[0].x, pos_arr[0].y);
+
+        text_menu[1].SetText("Exit");
+
+        text_menu[1].SetColor(TextObject::BLACK_TEXT);
+
+        text_menu[1].SetRect(pos_arr[1].x, pos_arr[1].y);
+
+        bool selected[kMenuItemNum] = { 0, 0 };
+
+        SDL_Event m_event;
+
+        while (true)
+        {
+            ApplySurface(menu, des, 0, 0);
+
+            for (int i = 0; i < kMenuItemNum; i++)
+            {
+                text_menu[i].CreateGameText(font, des);
+            }
+        }
+
+        while (SDL_PollEvent(&m_event))
+        {
+            switch (m_event.type)
+            {
+            case SDL_QUIT:
+                return 1;
+            case SDL_MOUSEMOTION:
+                {
+                    xm = m_event.motion.x;
+                    
+                    ym = m_event.motion.y;
+
+                    for (int i = 0; i < kMenuItemNum; i++)
+                    {
+                        
+                    }
+                }
+            }
+        }
+    }
 
     //Clean up the memory
 
