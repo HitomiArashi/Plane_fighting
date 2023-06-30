@@ -18,6 +18,8 @@
 
 using namespace std;
 
+using namespace SDLCommonFunc;
+
 TTF_Font* g_font_text = NULL;
 
 //Check initialization
@@ -79,9 +81,9 @@ void Background_Moving_Type_1(int& bkgn_x)
 {
     bkgn_x -= SCREEN_SPEED;
 
-    SDLCommonFunc::ApplySurface(g_bkground, g_screen, bkgn_x, 0);
+    ApplySurface(g_bkground, g_screen, bkgn_x, 0);
 
-    SDLCommonFunc::ApplySurface(g_bkground, g_screen, bkgn_x + SCREEN_WIDTH, 0);
+    ApplySurface(g_bkground, g_screen, bkgn_x + SCREEN_WIDTH, 0);
 
     if (bkgn_x <= -SCREEN_WIDTH)
     {
@@ -107,7 +109,7 @@ void Background_Moving_Type_2(int& bkgn_x, bool &is_run_screen)
         
         else
         {
-            SDLCommonFunc::ApplySurface(g_bkground, g_screen, bkgn_x, 0);
+            ApplySurface(g_bkground, g_screen, bkgn_x, 0);
         }
     }
 }
@@ -147,14 +149,14 @@ int main(int arc, char* argv[])
 
     //Load background
 
-    g_bkground = SDLCommonFunc::LoadImage(BACKGROUND_FOR_TYPE_2);
+    g_bkground = LoadImage(BACKGROUND_FOR_TYPE_2);
 
     if (g_bkground == NULL)
     {
         return 0;
     }
 
-    SDLCommonFunc::ApplySurface(g_bkground, g_screen, 0, 0);
+    ApplySurface(g_bkground, g_screen, 0, 0);
 
     //Make main object
 
@@ -274,7 +276,7 @@ int main(int arc, char* argv[])
 
                 //Check collision between main and threats
 
-                bool is_col = SDLCommonFunc::CheckCollision(plane->GetRect(), p_threat->GetRect());
+                bool is_col = CheckCollision(plane->GetRect(), p_threat->GetRect());
 
                 if (is_col)
                 {
@@ -322,7 +324,7 @@ int main(int arc, char* argv[])
                         {
                             delete[] p_threats;
 
-                            SDLCommonFunc::CleanUp();
+                            CleanUp();
 
                             SDL_Quit();
 
@@ -336,7 +338,7 @@ int main(int arc, char* argv[])
 
                         delete[] p_threats;
 
-                        SDLCommonFunc::CleanUp();
+                        CleanUp();
 
                         SDL_Quit();
 
@@ -354,7 +356,7 @@ int main(int arc, char* argv[])
 
                     if (p_bullet != NULL)
                     {
-                        bool ret_col = SDLCommonFunc::CheckCollision(p_bullet->GetRect(), p_threat->GetRect());
+                        bool ret_col = CheckCollision(p_bullet->GetRect(), p_threat->GetRect());
 
                         if (ret_col)
                         {
@@ -406,7 +408,7 @@ int main(int arc, char* argv[])
 
                     if (threat_bullet != NULL)
                     {
-                        bool ret_col = SDLCommonFunc::CheckCollision(plane->GetRect(), threat_bullet->GetRect());
+                        bool ret_col = CheckCollision(plane->GetRect(), threat_bullet->GetRect());
 
                         if (ret_col)
                         {
@@ -454,7 +456,7 @@ int main(int arc, char* argv[])
                                 {
                                     delete[] p_threats;
 
-                                    SDLCommonFunc::CleanUp();
+                                    CleanUp();
 
                                     SDL_Quit();
 
@@ -468,7 +470,7 @@ int main(int arc, char* argv[])
 
                                 delete[] p_threats;
 
-                                SDLCommonFunc::CleanUp();
+                                CleanUp();
 
                                 SDL_Quit();
 
@@ -522,7 +524,7 @@ int main(int arc, char* argv[])
 
     delete[] p_threats;
 
-    SDLCommonFunc::CleanUp();
+    CleanUp();
 
     SDL_Quit();
 
