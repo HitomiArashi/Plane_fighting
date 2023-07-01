@@ -24,6 +24,8 @@ TTF_Font* g_font_text = NULL;
 
 TTF_Font* g_font_menu = NULL;
 
+TTF_Font* g_font_over = NULL;
+
 //Check initialization
 
 bool Init()
@@ -63,16 +65,110 @@ bool Init()
         return false;
     }
 
+    //Read file ttf text font
+
     g_font_text = TTF_OpenFont("PTN77F.ttf", 20);
 
     g_font_menu = TTF_OpenFont("PTN77F.ttf", 50);
 
-    if (g_font_text == NULL || g_font_menu == NULL)
+    g_font_over = TTF_OpenFont("PTN77F.ttf", 50);
+
+    if (g_font_text == NULL || g_font_menu == NULL || g_font_over == NULL)
     {
         return false;
     }
 
     return true;
+}
+
+//Clear all memory of the current game
+
+void endgame(ThreatObject*& p_threats)
+{
+    delete[] p_threats;
+
+    CleanUp();
+
+    SDL_Quit();
+}
+
+//Game over screen
+
+bool gameOver(Uint32& time_selected, unsigned int& mark_value, unsigned int& death_time, PlaneHp& plane_hp, MainObject*& plane, ThreatObject*& p_threats)
+{
+    int ret_over = ShowGameOver(g_screen, g_font_over);
+
+    if (ret_over == 1) //Exit game
+    {
+        return true;
+    }
+    else //Reset every stuff and retry
+    {
+        //Reset main object
+        
+        plane = new MainObject;
+
+        plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y);
+
+        bool ret = plane->LoadImg(MAIN_IMAGE);
+
+        if (ret == false)
+        {
+            return true;
+        }
+
+        //Reset threats object
+
+        p_threats = new ThreatObject[NUM_THREAT];
+
+        for (int t = 0; t < NUM_THREAT; t++)
+        {
+            ThreatObject* p_threat = (p_threats + t);
+
+            if (p_threat)
+            {
+                ret = p_threat->LoadImg(THREAT_IMAGE);
+
+                if (ret == false)
+                {
+                    return true;
+                }
+
+                //Set random spawn position for the threat objects
+
+                int rand_y = rand() % VAL_OFFSET_START_POS_THREATS;
+
+                if (rand_y > SCREEN_HEIGHT - UNDER_LIMIT_THREAT)
+                {
+                    rand_y = SCREEN_HEIGHT * 0.3;
+                }
+
+                p_threat->SetRect(SCREEN_WIDTH + t * VAL_OFFSET_START_POS_THREATS, rand_y);
+
+                p_threat->set_x_val(THREAT_SPEED);
+
+                //Make threat objects shoot bullet
+
+                BulletObject* p_bullet = new BulletObject();
+
+                p_threat->InitBullet(p_bullet);
+            }
+        }
+
+        //Reset hp
+
+        plane_hp.Init();
+
+        //Reset other stuff
+
+        death_time = 0;
+
+        mark_value = 0;
+
+        time_selected = SDL_GetTicks();
+
+        return false;
+    }
 }
 
 //Using 1 single looping background
@@ -118,6 +214,15 @@ void Background_Moving_Type_2(int& bkgn_x, bool &is_run_screen)
     }
 }
 
+//Using 1 background only, no moving.
+
+void Background_Standing(int& bkgn_x, bool& is_run_screen)
+{
+    is_run_screen = false;
+
+    ApplySurface(g_bkground, g_screen, bkgn_x, 0);
+}
+
 int main(int arc, char* argv[])
 {
     int bkgn_x = 0;
@@ -130,7 +235,7 @@ int main(int arc, char* argv[])
     
     if (Init() == false)
     {
-        return 0;
+        return GA_FAILED;
     }
 
     //Make plane HP
@@ -139,7 +244,7 @@ int main(int arc, char* argv[])
 
     plane_hp.Init();
 
-    //Set the timer
+    //Set the timer color
 
     TextObject game_time;
 
@@ -157,7 +262,7 @@ int main(int arc, char* argv[])
 
     if (g_bkground == NULL)
     {
-        return 0;
+        return GA_FAILED;
     }
 
     ApplySurface(g_bkground, g_screen, 0, 0);
@@ -172,7 +277,7 @@ int main(int arc, char* argv[])
 
     if (ret == false)
     {
-        return 0;
+        return GA_FAILED;
     }
 
     //Init explosion
@@ -185,7 +290,7 @@ int main(int arc, char* argv[])
 
     if (ret == NULL)
     {
-        return 0;
+        return GA_FAILED;
     }
 
     //Make threat objects
@@ -202,7 +307,7 @@ int main(int arc, char* argv[])
 
             if (ret == false)
             {
-                return 0;
+                return GA_FAILED;
             }
 
             //Set random spawn position for the threat objects
@@ -242,7 +347,7 @@ int main(int arc, char* argv[])
     }
     else
     {
-        time_selected = SDL_GetTicks();
+        time_selected = SDL_GetTicks(); //Get the time start game
     }
 
     while (is_quite == false)
@@ -255,6 +360,14 @@ int main(int arc, char* argv[])
             {
                 is_quite = true;
                 break;
+            }
+            else if (g_even.type == SDL_KEYDOWN)
+            {
+                if (g_even.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    is_quite = true;
+                    break;
+                }
             }
 
             plane->HandleInputAction(g_even, g_sound_bullet);
@@ -323,15 +436,16 @@ int main(int arc, char* argv[])
 
                         if (SDL_Flip(g_screen) == -1)
                         {
-                            return 0;
+                            return GA_FAILED;
                         }
                     }
+                    //Run while hp is still higher than 0
 
                     if (death_time < HEALTH_POINT)
                     {
                         SDL_Delay(1000);
 
-                        plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y);
+                        plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y); //Reset the plane
 
                         plane_hp.Decrease();
 
@@ -339,27 +453,22 @@ int main(int arc, char* argv[])
 
                         if (SDL_Flip(g_screen) == -1)
                         {
-                            delete[] p_threats;
+                            endgame(p_threats);
 
-                            CleanUp();
-
-                            SDL_Quit();
-
-                            return 1;
+                            return GA_FAILED;
                         }
                     }
 
                     else
                     {
-                        //Delete all memory
+                        //Run the game over screen
 
-                        delete[] p_threats;
+                        if (gameOver(time_selected, mark_value, death_time, plane_hp, plane, p_threats) == true)
+                        {
+                            endgame(p_threats);
 
-                        CleanUp();
-
-                        SDL_Quit();
-
-                        return 1;
+                            return GA_FAILED;
+                        }
                     }
                 }
 
@@ -403,7 +512,7 @@ int main(int arc, char* argv[])
 
                                 if (SDL_Flip(g_screen) == -1)
                                 {
-                                    return 0;
+                                    return GA_FAILED;
                                 }
                             }
                             //Reset the threat
@@ -455,15 +564,16 @@ int main(int arc, char* argv[])
 
                                 if (SDL_Flip(g_screen) == -1)
                                 {
-                                    return 0;
+                                    return GA_FAILED;
                                 }
                             }
+                            //Run while hp is still higher than 0
 
                             if (death_time < HEALTH_POINT)
                             {
                                 SDL_Delay(1000);
 
-                                plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y);
+                                plane->SetRect(POS_START_MAIN_X, POS_START_MAIN_Y); //Reset the plane
 
                                 plane_hp.Decrease();
 
@@ -471,27 +581,22 @@ int main(int arc, char* argv[])
 
                                 if (SDL_Flip(g_screen) == -1)
                                 {
-                                    delete[] p_threats;
+                                    endgame(p_threats);
 
-                                    CleanUp();
-
-                                    SDL_Quit();
-
-                                    return 1;
+                                    return GA_FAILED;
                                 }
                             }
 
                             else
                             {
-                                //Delete all memory
+                                //Run the game over screen
 
-                                delete[] p_threats;
+                                if (gameOver(time_selected, mark_value, death_time, plane_hp, plane, p_threats) == true)
+                                {
+                                    endgame(p_threats);
 
-                                CleanUp();
-
-                                SDL_Quit();
-
-                                return 1;
+                                    return GA_FAILED;
+                                }
                             }
                         }
                     }
@@ -533,19 +638,15 @@ int main(int arc, char* argv[])
         
         if (SDL_Flip(g_screen) == -1)
         {
-            return 0;
+            return GA_FAILED;
         }
     }
 
     //Delete all memory
 
-    delete[] p_threats;
+    endgame(p_threats);
 
-    CleanUp();
-
-    SDL_Quit();
-
-    return 0;
+    return GA_FAILED;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
