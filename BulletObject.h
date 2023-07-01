@@ -8,8 +8,6 @@
 
 #include "BaseObject.h"
 
-using namespace std;
-
 //Start the define
 
 class BulletObject : public BaseObject
@@ -21,9 +19,7 @@ public:
 	enum BulletType
 	{
 		NONE = 0,
-
 		LASER = 1,
-
 		SPHERE = 2
 	};
 
@@ -54,7 +50,6 @@ public:
 	void SetWidthHeight(const int& widht, const int& height)
 	{
 		rect_.w = widht;
-
 		rect_.h = height;
 	}
 
@@ -111,11 +106,8 @@ public:
 private:
 
 	int x_val_;
-
 	int y_val_;
-
 	bool is_move_;
-
 	int bullet_type_;
 };
 #endif
