@@ -105,6 +105,8 @@ void ThreatObject::HandleInputAction(SDL_Event events)
 	;
 }
 
+//Reset the threats
+
 void ThreatObject::Reset(const int& xborder)
 {
 	rect_.x = xborder;
@@ -126,6 +128,8 @@ void ThreatObject::Reset(const int& xborder)
 		}
 	}
 }
+
+//Reset the bullet
 
 void ThreatObject::ResetBullet(BulletObject* p_bullet)
 {
