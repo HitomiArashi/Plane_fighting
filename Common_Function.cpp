@@ -149,68 +149,96 @@ namespace SDLCommonFunc
         return false;
     }
 
+    //Show the menu screen
+
     int ShowMenu(SDL_Surface* des, TTF_Font* font)
     {
+
+        //Take menu background
+
         g_menu = LoadImage("Menu.png");
         if (g_menu == NULL)
         {
             return 1;
         }
+
+        //Set position for the item int the menu screen
+
         const int kMenuItemNum = 2;
         int xm = 0, ym = 0;
         SDL_Rect pos_arr[kMenuItemNum];
+
         pos_arr[0].x = 200;
         pos_arr[0].y = 350;
+
         pos_arr[1].x = 200;
         pos_arr[1].y = 400;
+
         TextObject text_menu[kMenuItemNum];
+
         text_menu[0].SetText("Play Game");
         text_menu[0].SetColor(TextObject::BLACK_TEXT);
         text_menu[0].SetRect(pos_arr[0].x, pos_arr[0].y);
+
         text_menu[1].SetText("Exit");
         text_menu[1].SetColor(TextObject::BLACK_TEXT);
         text_menu[1].SetRect(pos_arr[1].x, pos_arr[1].y);
+
+        //Mouse interactive
+
         bool selected[kMenuItemNum] = { 0, 0 };
         SDL_Event m_event;
         while (true)
         {
             ApplySurface(g_menu, des, 0, 0);
+
+            //Show the item on the screen
+
             for (int i = 0; i < kMenuItemNum; i++)
             {
                 text_menu[i].CreateGameText(font, des);
             }
+
             while (SDL_PollEvent(&m_event))
             {
                 switch (m_event.type)
                 {
-                case SDL_QUIT:
+                case SDL_QUIT: //Press the "x" button on screen
                     return 1;
-                case SDL_KEYDOWN:
+                case SDL_KEYDOWN: //Press the "ESC" button
                     if (m_event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         return 1;
                     }
-                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONDOWN: //Press mouse button
+
+                    //Take the mouse position
+
                     xm = m_event.button.x;
                     ym = m_event.button.y;
+
                     for (int i = 0; i < kMenuItemNum; i++)
                     {
-                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect())) //Check which item is choosen
                         {
                             return i;
                         }
                     }
-                case SDL_MOUSEMOTION:
+                case SDL_MOUSEMOTION: //Mouse movement
+
+                    //Take the mouse position
+
                     xm = m_event.motion.x;
                     ym = m_event.motion.y;
+
                     for (int i = 0; i < kMenuItemNum; i++)
                     {
-                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect())) //Check if item is selected
                         {
                             if (selected[i] == false)
                             {
                                 selected[i] = true;
-                                text_menu[i].SetColor(TextObject::RED_TEXT);
+                                text_menu[i].SetColor(TextObject::RED_TEXT); //If item selected then change to RED color
                             }
                         }
                         else
@@ -218,7 +246,7 @@ namespace SDLCommonFunc
                             if (selected[i] == true)
                             {
                                 selected[i] = false;
-                                text_menu[i].SetColor(TextObject::BLACK_TEXT);
+                                text_menu[i].SetColor(TextObject::BLACK_TEXT); //If item not selected then change to BLACK color
                             }
                         }
                     }               
@@ -229,48 +257,69 @@ namespace SDLCommonFunc
         return 1;
     }
 
+    //Show the screen when the game is over
+
     int ShowGameOver(SDL_Surface* des, TTF_Font* font)
     {
+        
+        //Take the game over background
+
         g_over = LoadImage("GameOver.png");
         if (g_over == NULL)
         {
             return 1;
         }
+
+        //Set the info for the item on the screen
+
         const int kOverItemNum = 2;
         int xm = 0, ym = 0;
+
         SDL_Rect pos_arr[kOverItemNum];
+
         pos_arr[0].x = 200;
         pos_arr[0].y = 350;
+
         pos_arr[1].x = 200;
         pos_arr[1].y = 400;
+
         TextObject text_menu[kOverItemNum];
+
         text_menu[0].SetText("Retry");
         text_menu[0].SetColor(TextObject::BLACK_TEXT);
         text_menu[0].SetRect(pos_arr[0].x, pos_arr[0].y);
+
         text_menu[1].SetText("Exit");
         text_menu[1].SetColor(TextObject::BLACK_TEXT);
         text_menu[1].SetRect(pos_arr[1].x, pos_arr[1].y);
+
+        //Mouse interactive
+
         bool selected[kOverItemNum] = { 0, 0 };
         SDL_Event m_event;
         while (true)
         {
+
+            //Show the item on the screen
+
             ApplySurface(g_over, des, 0, 0);
             for (int i = 0; i < kOverItemNum; i++)
             {
                 text_menu[i].CreateGameText(font, des);
             }
+
             while (SDL_PollEvent(&m_event))
             {
                 switch (m_event.type)
                 {
-                case SDL_QUIT:
+                case SDL_QUIT: //Press the "x" button on the screen
                     return 1;
-                case SDL_KEYDOWN:
+                case SDL_KEYDOWN: //Press the "ESC" button
                     if (m_event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         return 1;
                     }
-                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONDOWN: //Press mouse button
                     xm = m_event.button.x;
                     ym = m_event.button.y;
                     for (int i = 0; i < kOverItemNum; i++)
@@ -280,17 +329,20 @@ namespace SDLCommonFunc
                             return i;
                         }
                     }
-                case SDL_MOUSEMOTION:
+                case SDL_MOUSEMOTION: //Mouse movement
+
+                    //Take the mouse position
+
                     xm = m_event.motion.x;
                     ym = m_event.motion.y;
                     for (int i = 0; i < kOverItemNum; i++)
                     {
-                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect())) //Check if item is selected
                         {
                             if (selected[i] == false)
                             {
                                 selected[i] = true;
-                                text_menu[i].SetColor(TextObject::RED_TEXT);
+                                text_menu[i].SetColor(TextObject::RED_TEXT); //If item selected then change to RED color
                             }
                         }
                         else
@@ -298,7 +350,7 @@ namespace SDLCommonFunc
                             if (selected[i] == true)
                             {
                                 selected[i] = false;
-                                text_menu[i].SetColor(TextObject::BLACK_TEXT);
+                                text_menu[i].SetColor(TextObject::BLACK_TEXT); //If item not selected then change to BLACK color
                             }
                         }
                     }
