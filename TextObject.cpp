@@ -1,3 +1,5 @@
+//The header and library will use
+
 #include "TextObject.h"
 
 TextObject::TextObject()
@@ -15,6 +17,8 @@ TextObject::~TextObject()
 	//Todo
 	;
 }
+
+//Set color for the text
 
 void TextObject::SetColor(const int& type)
 {
@@ -34,6 +38,8 @@ void TextObject::SetColor(const int& type)
 		text_color_ = color;
 	}
 }
+
+//Show the text on the screen
 
 void TextObject::CreateGameText(TTF_Font* font, SDL_Surface* des)
 {
