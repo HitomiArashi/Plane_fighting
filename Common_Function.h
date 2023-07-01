@@ -20,8 +20,6 @@
 
 #include<SDL_ttf.h>
 
-#include "TextObject.h"
-
 using namespace std;
 
 //Infomation of the input and output stuff
@@ -124,7 +122,7 @@ namespace SDLCommonFunc
 {
 	SDL_Surface* LoadImage(string file_path);
 
-	void ApplySurface(SDL_Surface* src, SDL_Surface* des, int x, int y);
+	SDL_Rect ApplySurface(SDL_Surface* src, SDL_Surface* des, int x, int y);
 
 	void ApplySurfaceClip(SDL_Surface* scr, SDL_Surface* des, SDL_Rect* clip, int x, int y);
 
@@ -132,7 +130,9 @@ namespace SDLCommonFunc
 
 	void CleanUp();
 
-	//int ShowMenu(SDL_Surface* des, TTF_Font* font);
+	int ShowMenu(SDL_Surface* des, TTF_Font* font);
+
+	bool CheckFocusWithRect(const int& x, const int& y, const SDL_Rect& rect);
 }
 
 #endif
