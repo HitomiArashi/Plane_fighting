@@ -22,6 +22,8 @@ using namespace SDLCommonFunc;
 
 TTF_Font* g_font_text = NULL;
 
+TTF_Font* g_font_menu = NULL;
+
 //Check initialization
 
 bool Init()
@@ -63,7 +65,9 @@ bool Init()
 
     g_font_text = TTF_OpenFont("PTN77F.ttf", 20);
 
-    if (g_font_text == NULL)
+    g_font_menu = TTF_OpenFont("PTN77F.ttf", 50);
+
+    if (g_font_text == NULL || g_font_menu == NULL)
     {
         return false;
     }
@@ -227,6 +231,19 @@ int main(int arc, char* argv[])
     unsigned int death_time = 0;
 
     unsigned int mark_value = 0;
+
+    Uint32 time_selected = 0;
+
+    int ret_menu = ShowMenu(g_screen, g_font_menu);
+
+    if (ret_menu == 1)
+    {
+        is_quite = true;
+    }
+    else
+    {
+        time_selected = SDL_GetTicks();
+    }
 
     while (is_quite == false)
     {
@@ -486,7 +503,7 @@ int main(int arc, char* argv[])
 
         string str_time = "Time: ";
 
-        Uint32 time_val = SDL_GetTicks() / 1000;
+        Uint32 time_val = (SDL_GetTicks() - time_selected) / 1000;
 
         string str_val = to_string(time_val);
 
