@@ -1,3 +1,5 @@
+//The header and library will use
+
 #include "PlaneHp.h"
 
 PlaneHp::PlaneHp()
@@ -11,6 +13,8 @@ PlaneHp :: ~PlaneHp()
 	//Todo
 	;
 }
+
+//Initialize the heart shown
 
 void PlaneHp::Init()
 {
@@ -26,10 +30,14 @@ void PlaneHp::Init()
 	}
 }
 
+//Add the position for each heart
+
 void PlaneHp::AddPos(const int& xpos)
 {
 	pos_list_.push_back(xpos);
 }
+
+//Show the heart
 
 void PlaneHp::Render(SDL_Surface* des)
 {
@@ -42,6 +50,8 @@ void PlaneHp::Render(SDL_Surface* des)
 		}
 	}
 }
+
+//Decrease the heart when attacked
 
 void PlaneHp::Decrease()
 {
