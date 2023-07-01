@@ -51,6 +51,6 @@ void BaseObject::Show(SDL_Surface* des)
 {
 	if (p_object_ != NULL) 
 	{
-		ApplySurface(p_object_, des, rect_.x, rect_.y);
+		rect_ = ApplySurface(p_object_, des, rect_.x, rect_.y);
 	}
 }
