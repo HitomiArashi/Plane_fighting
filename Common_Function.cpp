@@ -14,6 +14,8 @@
 
 #include "Common_Function.h"
 
+#include "TextObject.h"
+
 using namespace std;
 
 namespace SDLCommonFunc
@@ -49,7 +51,7 @@ namespace SDLCommonFunc
 
     //Show the object
 
-    void ApplySurface(SDL_Surface* scr, SDL_Surface* des, int x, int y)
+    SDL_Rect ApplySurface(SDL_Surface* scr, SDL_Surface* des, int x, int y)
     {
         SDL_Rect ofset;
 
@@ -58,6 +60,8 @@ namespace SDLCommonFunc
         ofset.y = y;
 
         SDL_BlitSurface(scr, NULL, des, &ofset);
+
+        return ofset;
     }
 
     void ApplySurfaceClip(SDL_Surface* scr, SDL_Surface* des, SDL_Rect* clip, int x, int y)
@@ -156,6 +160,18 @@ namespace SDLCommonFunc
         return false;
     }
 
+    //Check the choosing using mouse
+
+    bool CheckFocusWithRect(const int& x, const int& y, const SDL_Rect& rect)
+    {
+        if ((x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     int ShowMenu(SDL_Surface* des, TTF_Font* font)
     {
         menu = LoadImage("Menu.png");
@@ -173,11 +189,11 @@ namespace SDLCommonFunc
 
         pos_arr[0].x = 200;
 
-        pos_arr[0].y = 400;
+        pos_arr[0].y = 350;
 
         pos_arr[1].x = 200;
 
-        pos_arr[1].y = 200;
+        pos_arr[1].y = 400;
 
         TextObject text_menu[kMenuItemNum];
 
@@ -205,27 +221,72 @@ namespace SDLCommonFunc
             {
                 text_menu[i].CreateGameText(font, des);
             }
-        }
 
-        while (SDL_PollEvent(&m_event))
-        {
-            switch (m_event.type)
+            while (SDL_PollEvent(&m_event))
             {
-            case SDL_QUIT:
-                return 1;
-            case SDL_MOUSEMOTION:
+                switch (m_event.type)
                 {
+                case SDL_QUIT:
+
+                    return 1;
+
+                case SDL_KEYDOWN:
+
+                    if (m_event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        return 1;
+                    }
+
+                case SDL_MOUSEBUTTONDOWN:
+                
+                    xm = m_event.button.x;
+
+                    ym = m_event.button.y;
+
+                    for (int i = 0; i < kMenuItemNum; i++)
+                    {
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        {
+                            
+                            
+                            return i;
+                        }
+                    }
+                
+                case SDL_MOUSEMOTION:
+                
                     xm = m_event.motion.x;
-                    
+
                     ym = m_event.motion.y;
 
                     for (int i = 0; i < kMenuItemNum; i++)
                     {
-                        
-                    }
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        {
+                            if (selected[i] == false)
+                            {
+                                selected[i] = true;
+
+                                text_menu[i].SetColor(TextObject::RED_TEXT);
+                            }
+                        }
+
+                        else
+                        {
+                            if (selected[i] == true)
+                            {
+                                selected[i] = false;
+
+                                text_menu[i].SetColor(TextObject::BLACK_TEXT);
+                            }
+                        }
+                    }               
                 }
+                SDL_Flip(des);
             }
         }
+
+        return 1;
     }
 
     //Clean up the memory
