@@ -4,6 +4,8 @@
 
 #define PLANE_HP_H_
 
+//The header and library will use
+
 #include "BaseObject.h"
 #include <vector>
 
