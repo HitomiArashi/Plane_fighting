@@ -3,10 +3,7 @@
 #pragma once
 
 #include "BaseObject.h"
-
 #include "Common_Function.h"
-
-using namespace std;
 
 using namespace SDLCommonFunc;
 
@@ -15,9 +12,7 @@ using namespace SDLCommonFunc;
 BaseObject::BaseObject()
 {
 	rect_.x = 0;
-
 	rect_.y = 0;
-
 	p_object_ = NULL;
 }
 
@@ -33,15 +28,13 @@ BaseObject::~BaseObject()
 
 //Load the object image
 
-bool BaseObject::LoadImg(const string file_name)
+bool BaseObject::LoadImg(const std::string file_name)
 {
 	p_object_ = LoadImage(file_name);
-
 	if (p_object_ == NULL)
 	{
 		return false;
 	}
-
 	return true;
 }
 
