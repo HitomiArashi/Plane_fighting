@@ -32,7 +32,9 @@ static SDL_Surface* g_screen = NULL;
 
 static SDL_Surface* g_bkground = NULL;
 
-static SDL_Surface* menu = NULL;
+static SDL_Surface* g_menu = NULL;
+
+static SDL_Surface* g_over = NULL;
 
 static SDL_Event g_even;
 
@@ -131,6 +133,8 @@ namespace SDLCommonFunc
 	void CleanUp();
 
 	int ShowMenu(SDL_Surface* des, TTF_Font* font);
+
+	int ShowGameOver(SDL_Surface* des, TTF_Font* font);
 
 	bool CheckFocusWithRect(const int& x, const int& y, const SDL_Rect& rect);
 }
