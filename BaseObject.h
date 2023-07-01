@@ -7,10 +7,7 @@
 //The header and library will use
 
 #include <SDL.h>
-
 #include "Common_Function.h"
-
-using namespace std;
 
 //Start the define
 
@@ -35,7 +32,7 @@ public:
 
 	//Load the object image
 
-	bool LoadImg(const string file_name);
+	bool LoadImg(const std::string file_name);
 
 	//Set the cord to spawn
 
@@ -58,7 +55,6 @@ public:
 protected:
 
 	SDL_Rect rect_;
-
 	SDL_Surface* p_object_;
 
 };
