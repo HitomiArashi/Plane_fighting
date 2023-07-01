@@ -174,9 +174,9 @@ namespace SDLCommonFunc
 
     int ShowMenu(SDL_Surface* des, TTF_Font* font)
     {
-        menu = LoadImage("Menu.png");
+        g_menu = LoadImage("Menu.png");
 
-        if (menu == NULL)
+        if (g_menu == NULL)
         {
             return 1;
         }
@@ -215,7 +215,7 @@ namespace SDLCommonFunc
 
         while (true)
         {
-            ApplySurface(menu, des, 0, 0);
+            ApplySurface(g_menu, des, 0, 0);
 
             for (int i = 0; i < kMenuItemNum; i++)
             {
@@ -281,6 +281,121 @@ namespace SDLCommonFunc
                             }
                         }
                     }               
+                }
+                SDL_Flip(des);
+            }
+        }
+
+        return 1;
+    }
+
+    int ShowGameOver(SDL_Surface* des, TTF_Font* font)
+    {
+        g_over = LoadImage("GameOver.png");
+
+        if (g_over == NULL)
+        {
+            return 1;
+        }
+
+        const int kOverItemNum = 2;
+
+        int xm = 0, ym = 0;
+
+        SDL_Rect pos_arr[kOverItemNum];
+
+        pos_arr[0].x = 200;
+
+        pos_arr[0].y = 350;
+
+        pos_arr[1].x = 200;
+
+        pos_arr[1].y = 400;
+
+        TextObject text_menu[kOverItemNum];
+
+        text_menu[0].SetText("Retry");
+
+        text_menu[0].SetColor(TextObject::BLACK_TEXT);
+
+        text_menu[0].SetRect(pos_arr[0].x, pos_arr[0].y);
+
+        text_menu[1].SetText("Exit");
+
+        text_menu[1].SetColor(TextObject::BLACK_TEXT);
+
+        text_menu[1].SetRect(pos_arr[1].x, pos_arr[1].y);
+
+        bool selected[kOverItemNum] = { 0, 0 };
+
+        SDL_Event m_event;
+
+        while (true)
+        {
+            ApplySurface(g_over, des, 0, 0);
+
+            for (int i = 0; i < kOverItemNum; i++)
+            {
+                text_menu[i].CreateGameText(font, des);
+            }
+
+            while (SDL_PollEvent(&m_event))
+            {
+                switch (m_event.type)
+                {
+                case SDL_QUIT:
+
+                    return 1;
+
+                case SDL_KEYDOWN:
+
+                    if (m_event.key.keysym.sym == SDLK_ESCAPE)
+                    {
+                        return 1;
+                    }
+
+                case SDL_MOUSEBUTTONDOWN:
+
+                    xm = m_event.button.x;
+
+                    ym = m_event.button.y;
+
+                    for (int i = 0; i < kOverItemNum; i++)
+                    {
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        {
+                            return i;
+                        }
+                    }
+
+                case SDL_MOUSEMOTION:
+
+                    xm = m_event.motion.x;
+
+                    ym = m_event.motion.y;
+
+                    for (int i = 0; i < kOverItemNum; i++)
+                    {
+                        if (CheckFocusWithRect(xm, ym, text_menu[i].GetRect()))
+                        {
+                            if (selected[i] == false)
+                            {
+                                selected[i] = true;
+
+                                text_menu[i].SetColor(TextObject::RED_TEXT);
+                            }
+                        }
+
+                        else
+                        {
+                            if (selected[i] == true)
+                            {
+                                selected[i] = false;
+
+                                text_menu[i].SetColor(TextObject::BLACK_TEXT);
+                            }
+                        }
+                    }
                 }
                 SDL_Flip(des);
             }
