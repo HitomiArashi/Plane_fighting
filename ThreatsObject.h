@@ -7,14 +7,9 @@
 //The header and library will use
 
 #include "Common_Function.h"
-
 #include "BaseObject.h"
-
 #include "BulletObject.h"
-
 #include <vector>
-
-using namespace std;
 
 //Start the define
 
@@ -40,14 +35,14 @@ public:
 
 	//Set the list of the bullet
 
-	void SetBulletList(vector <BulletObject*> bullet_list)
+	void SetBulletList(std::vector <BulletObject*> bullet_list)
 	{
 		p_bullet_list_ = bullet_list;
 	}
 
 	//List of the bullet
 
-	vector <BulletObject*> GetBulletList() const
+	std::vector <BulletObject*> GetBulletList() const
 	{
 		return p_bullet_list_;
 	}
@@ -58,7 +53,6 @@ public:
 	{
 		x_val_ = val;
 	}
-
 	void set_y_val(const int& val)
 	{
 		y_val_ = val;
@@ -70,7 +64,6 @@ public:
 	{
 		return x_val_;
 	}
-
 	int get_y_val() const
 	{
 		return y_val_;
@@ -83,17 +76,13 @@ public:
 	//Handle other action
 
 	void HandleInputAction(SDL_Event events);
-
 	void Reset(const int& xborder);
-
 	void ResetBullet(BulletObject* p_bullet);
 
 private:
 
 	int x_val_;
-
 	int y_val_;
-
-	vector <BulletObject*> p_bullet_list_;
+	std::vector <BulletObject*> p_bullet_list_;
 };
 #endif
