@@ -11,6 +11,8 @@
 
 using namespace SDLCommonFunc;
 
+//Font of the text shown
+
 TTF_Font* g_font_text = NULL;
 TTF_Font* g_font_menu = NULL;
 TTF_Font* g_font_over = NULL;
