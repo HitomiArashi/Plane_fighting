@@ -7,6 +7,7 @@
 #include "ExplosionObject.h"
 #include "PlaneHp.h"
 #include "TextObject.h"
+
 #undef main
 
 using namespace SDLCommonFunc;
